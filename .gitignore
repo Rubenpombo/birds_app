@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
+.vscode/
+.idea/
+
+# Backend
+backend/static/uploads/
+*.db
+*.sqlite3
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Frontend
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Logs
+*.log
+backend.log
+frontend.log
+frontend_debug.log
+frontend_out.log
+server.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other
+.gemini/
