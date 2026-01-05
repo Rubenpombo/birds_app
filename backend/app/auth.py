@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
+import os
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
@@ -7,10 +8,12 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from . import database
 
-# Configuration (In a real app, use environment variables)
-SECRET_KEY = "birds-app-secret-key-replace-me"
+# Configuration - read from environment for production
+SECRET_KEY = os.getenv("JWT_SECRET", "birds-app-dev-secret-key-NOT-FOR-PRODUCTION")
+if SECRET_KEY == "birds-app-dev-secret-key-NOT-FOR-PRODUCTION":
+    print("WARNING: Using default JWT_SECRET. Set JWT_SECRET env var for production!")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 # 24 hours
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 
 # Use argon2 instead of bcrypt to avoid version conflicts
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")

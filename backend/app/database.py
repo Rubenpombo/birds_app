@@ -28,13 +28,19 @@ class SharedResult(Base):
     user = relationship("User", back_populates="results")
 
 # Database setup
-# Store db in backend directory (parent of app)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "..", "iberbirds.db")
-SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_PATH}"
+# Default to SQLite
+DEFAULT_DB_URL = f"sqlite:///{os.path.join(BASE_DIR, '..', 'iberbirds.db')}"
+
+# Read from env, handle postgres naming if needed (Render/Supabase use postgres:// sometimes)
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB_URL)
+if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+connect_args = {"check_same_thread": False} if "sqlite" in SQLALCHEMY_DATABASE_URL else {}
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL, connect_args=connect_args
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -38,8 +38,8 @@
     - [x] Connect Sidebar to `GET /api/history`.
 
 ## Phase 5: DevOps & Production Readiness (Current)
-- [ ] **Containerization Assessment**: Evaluate Dockerization strategy for Backend (FastAPI + YOLO) and Frontend (Vite).
-- [ ] **Docker Implementation**: Create Dockerfiles and docker-compose.yml.
-- [ ] **Cloud Deployment**: Deploy the full stack (likely Vercel for Frontend, Render/Railway for Backend due to GPU/Model requirements).
-- [ ] **CI/CD Pipeline**: GitHub Actions for automated testing and deployment.
-- [ ] **Observability**: Prometheus & Grafana integration.
+- [x] **Deployment Configuration**: Added `vercel.json` and entrypoint for Serverless deployment.
+- [ ] **Vercel Deployment**: Deploy Frontend and Backend to Vercel.
+- [ ] **CI/CD Pipeline**: Configure GitHub Actions to run tests on push.
+- [ ] **Optimization**: Ensure YOLO model runs efficiently within Serverless memory/timeout limits.
+- [ ] **Lightweight Monitoring**: Basic error tracking (e.g., check logs, maybe Sentry).
