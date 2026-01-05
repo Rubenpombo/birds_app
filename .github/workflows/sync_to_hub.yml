@@ -14,8 +14,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Install Hugging Face Hub CLI
-        run: pip install huggingface_hub
+        run: pip install -U "huggingface_hub[cli]"
 
       - name: Upload to Hub
         env:
