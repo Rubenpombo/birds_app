@@ -1,3 +1,13 @@
+---
+title: IberBirds Backend
+emoji: 🦅
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # IBERBIRDS
 
 IBERBIRDS is a web application that uses a custom-trained YOLO11 model to detect and classify 10 specific bird species found in the Iberian Peninsula.
@@ -18,40 +28,12 @@ IBERBIRDS is a web application that uses a custom-trained YOLO11 model to detect
 5. Milvus milvus
 6. Milvus migrans
 7. Neophron percnopterus
-8. Falco peregrinus
+8. Aquila adalberti
 9. Aquila chrysaetos
-10. Aquila adalberti
+10. Falco peregrinus
 
-## Project Structure
-- `backend/`: FastAPI application and YOLO inference logic.
-- `frontend/`: React + Vite + Tailwind CSS application.
-- `models/`: Contains the trained YOLO model (`best.pt`).
-
-## Setup & Running
-
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-
-### Quick Start
-
-1. **Backend**:
-   ```bash
-   # Create virtual environment if not exists
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r backend/requirements.txt
-   
-   # Run server
-   chmod +x run_backend.sh
-   ./run_backend.sh
-   ```
-   The backend API runs at `http://localhost:8000`.
-
-2. **Frontend**:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   Access the app at `http://localhost:5173`.
+## Tech Stack
+- **Frontend**: React, Tailwind CSS, Vite.
+- **Backend**: Python, FastAPI, YOLO11 (Ultralytics).
+- **Database**: Supabase (PostgreSQL).
+- **Deployment**: Vercel (Frontend), Hugging Face Spaces (Backend).
