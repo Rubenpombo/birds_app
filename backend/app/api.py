@@ -109,50 +109,32 @@ async def detect(file: UploadFile = File(...)):
 
 @router.post("/share")
 def share_result(request: ShareRequest, db: Session = Depends(get_db), current_user: User = Depends(auth.get_current_user)):
-    # Note: I changed this to require login because otherwise it's not "SharedResult/History" linked to User
-    # But for public sharing we might want a different endpoint or handle None user.
-    # Given requirements say "Update SharedResult model to link to User", and Sidebar needs History.
-    # I'll make it optionally authenticated for public shares, but if auth is present, link it.
-    # Actually, the requirement says "sidebar fetches user's past queries".
-    # Let's check how auth.get_current_user behaves. It raises if token is missing.
-    # I'll use a wrapper or manual check if I want it optional.
-    # For now, let's strictly follow the "authenticated" path for history.
-    
     try:
         # Generate ID
         share_id = str(uuid.uuid4())
         filename = f"{share_id}.jpg"
         
-        # Path logic
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        upload_dir = os.path.join(base_dir, "..", "static", "uploads")
-        if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir)
-            
-        filepath = os.path.join(upload_dir, filename)
+        # Use storage service to upload image
+        from .storage import storage_service
+        image_url = storage_service.upload_base64_image(request.image_base64, filename)
         
-        # Save image
-        img_data_str = request.image_base64
-        if "," in img_data_str:
-            img_data_str = img_data_str.split(",")[1]
-            
-        img_data = base64.b64decode(img_data_str)
-        
-        with open(filepath, "wb") as f:
-            f.write(img_data)
-            
         # Save to DB
+        # If url starts with http, it is absolute (Supabase). If not, we might need prefix.
+        # But storage service returns ready-to-use URL or path.
+        # Let's just store what storage service returns as "image_filename" or rename column to image_url?
+        # Column is "image_filename", let's keep it but store the path/url provided.
+        
         db_entry = SharedResult(
             id=share_id,
             user_id=current_user.id if current_user else None,
-            image_filename=f"uploads/{filename}",
+            image_filename=image_url, # Storing full URL/Path here
             metadata_json=json.dumps(request.detections)
         )
         db.add(db_entry)
         db.commit()
         db.refresh(db_entry)
         
-        return {"id": share_id, "url": f"/static/uploads/{filename}"}
+        return {"id": share_id, "url": image_url}
         
     except Exception as e:
         print(f"Share error: {e}")
@@ -162,24 +144,38 @@ def share_result(request: ShareRequest, db: Session = Depends(get_db), current_u
 def get_history(db: Session = Depends(get_db), current_user: User = Depends(auth.get_current_user)):
     results = db.query(SharedResult).filter(SharedResult.user_id == current_user.id).order_by(SharedResult.created_at.desc()).all()
     
-    return [
-        {
+    response = []
+    for r in results:
+        # Handle legacy or local paths vs absolute URLs
+        img_src = r.image_filename
+        if not img_src.startswith("http") and not img_src.startswith("/static"):
+             # It's a relative path from old version like "uploads/xyz.jpg" or new local "/static/..."
+             # If it was stored as "uploads/...", prepend /static/
+             if not img_src.startswith("/"):
+                 img_src = f"/static/{img_src}"
+        
+        response.append({
             "id": r.id,
-            "image_url": f"/static/{r.image_filename}",
+            "image_url": img_src,
             "detections": json.loads(r.metadata_json),
             "created_at": r.created_at
-        } for r in results
-    ]
+        })
+    return response
 
 @router.get("/share/{share_id}")
 def get_shared_result(share_id: str, db: Session = Depends(get_db)):
     result = db.query(SharedResult).filter(SharedResult.id == share_id).first()
     if not result:
         raise HTTPException(status_code=404, detail="Shared result not found")
+    
+    img_src = result.image_filename
+    if not img_src.startswith("http") and not img_src.startswith("/static"):
+             if not img_src.startswith("/"):
+                 img_src = f"/static/{img_src}"
         
     return {
         "id": result.id,
-        "image_url": f"/static/{result.image_filename}",
+        "image_url": img_src,
         "detections": json.loads(result.metadata_json),
         "created_at": result.created_at
     }

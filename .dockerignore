@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.venv
+venv/
+ENV/
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Frontend (not needed for backend container)
+frontend/
+node_modules/
+
+# Test files
+*.test.py
+test_*.py
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Documentation (not needed in container)
+*.md
+!README.md
+
+# Development files
+.env.local
+.env.development

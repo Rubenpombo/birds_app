@@ -33,6 +33,10 @@
 6. **Result**: Backend returns processed image and metadata.
 7. **History**: Sidebar fetches user's past queries from `GET /api/history`.
 
+## Design Philosophy
+- **Lightweight & Serverless**: The architecture prioritizes simplicity and low maintenance. Instead of complex container orchestration (k8s), we utilize serverless functions (Vercel) for the backend and static hosting for the frontend.
+- **Monolithic Source, Decoupled Deploy**: The codebase is kept together for ease of development, but deploys as decoupled services (Frontend -> CDN, Backend -> Serverless).
+
 ## Database Schema (SQLite)
 - **User**
   - `id` (UUID/Integer)
@@ -68,12 +72,14 @@
 │   │   └── ...
 ├── models/
 │   └── best.pt
+├── api/                   # Vercel Entrypoint
+│   └── index.py
 ├── ARCHITECTURE.md
 ├── PROGRESS.md
 └── README.md
 ```
 
 ## Future Roadmap
-- **Containerization**: Dockerize Backend and Frontend.
-- **CI/CD**: GitHub Actions.
-- **Monitoring**: Prometheus/Grafana.
+- **CI/CD**: GitHub Actions for automated testing and Vercel deployment.
+- **Optimization**: Model quantization (ONNX/TFLite) to improve serverless startup times.
+- **Monitoring**: Lightweight integration (e.g., Sentry or Vercel Analytics).
