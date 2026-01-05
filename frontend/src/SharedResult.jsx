@@ -73,55 +73,56 @@ function SharedResult() {
             <main className="w-full max-w-4xl bg-white/50 backdrop-blur-md p-6 md:p-10 rounded-[3rem] shadow-glass border border-white/20 animate-in fade-in zoom-in-95 duration-500">
                 <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
                     <img
-                        src={`${result.image_url}`}
+                        src={`${data.image_url}`}
                         alt="Shared Bird"
                         className="w-full h-64 object-cover rounded-lg mb-4"
                     />
-                    <h2 className="text-3xl font-bold text-green-800 mb-2">{result.species_name}</h2>
+                    <h2 className="text-3xl font-bold text-green-800 mb-2">{data.species_name}</h2>
+                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                        {data.detections.map((det, idx) => (
-                            <div key={idx} className="flex justify-between items-center p-5 bg-white rounded-2xl border border-earth-dark/5 shadow-sm">
-                                <div>
-                                    <span className="text-lg font-bold text-earth-dark block">
-                                        {det.class_name.replace(/_/g, ' ')}
-                                    </span>
-                                    <div className="flex items-center gap-2 mt-2">
-                                        <div className="w-32 bg-nature-100 rounded-full h-2">
-                                            <div
-                                                className="bg-earth-teal h-2 rounded-full transition-all duration-1000"
-                                                style={{ width: `${det.confidence * 100}%` }}
-                                            />
-                                        </div>
-                                        <span className="text-xs font-mono font-bold text-earth-teal">{(det.confidence * 100).toFixed(1)}%</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                    {data.detections.map((det, idx) => (
+                        <div key={idx} className="flex justify-between items-center p-5 bg-white rounded-2xl border border-earth-dark/5 shadow-sm">
+                            <div>
+                                <span className="text-lg font-bold text-earth-dark block">
+                                    {det.class_name.replace(/_/g, ' ')}
+                                </span>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <div className="w-32 bg-nature-100 rounded-full h-2">
+                                        <div
+                                            className="bg-earth-teal h-2 rounded-full transition-all duration-1000"
+                                            style={{ width: `${det.confidence * 100}%` }}
+                                        />
                                     </div>
+                                    <span className="text-xs font-mono font-bold text-earth-teal">{(det.confidence * 100).toFixed(1)}%</span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
+                </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-earth-dark/5 gap-6">
-                        <div className="flex items-center gap-3 text-earth-dark/40 text-sm font-medium">
-                            <Calendar className="w-5 h-5" />
-                            {new Date(data.created_at).toLocaleDateString(undefined, { dateStyle: 'long' })}
-                        </div>
-                        <div className="flex gap-4">
-                            <Link
-                                to="/"
-                                className="bg-earth-sand text-earth-dark border border-earth-dark/10 font-bold py-3.5 px-8 rounded-full transition-all hover:bg-white flex items-center gap-2"
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                                {t('shared_back')}
-                            </Link>
-                            <Link
-                                to="/app"
-                                className="bg-earth-dark hover:bg-earth-dark/90 text-white font-bold py-3.5 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-1 flex items-center gap-2"
-                            >
-                                <ArrowLeft className="w-5 h-5 rotate-180" />
-                                {t('shared_try')}
-                            </Link>
-                        </div>
+                <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-earth-dark/5 gap-6">
+                    <div className="flex items-center gap-3 text-earth-dark/40 text-sm font-medium">
+                        <Calendar className="w-5 h-5" />
+                        {new Date(data.created_at).toLocaleDateString(undefined, { dateStyle: 'long' })}
                     </div>
+                    <div className="flex gap-4">
+                        <Link
+                            to="/"
+                            className="bg-earth-sand text-earth-dark border border-earth-dark/10 font-bold py-3.5 px-8 rounded-full transition-all hover:bg-white flex items-center gap-2"
+                        >
+                            <ArrowLeft className="w-5 h-5" />
+                            {t('shared_back')}
+                        </Link>
+                        <Link
+                            to="/app"
+                            className="bg-earth-dark hover:bg-earth-dark/90 text-white font-bold py-3.5 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-1 flex items-center gap-2"
+                        >
+                            <ArrowLeft className="w-5 h-5 rotate-180" />
+                            {t('shared_try')}
+                        </Link>
+                    </div>
+                </div>
             </main>
             <footer className="mt-16 text-earth-dark/20 text-sm font-medium">
                 <p>© 2026 IberBirds Project</p>
