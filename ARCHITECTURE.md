@@ -1,7 +1,10 @@
 # Architecture & Design
 
 ## System Overview
-**Birds App** (physically located in `devops_birds`) is a web application designed to detect and classify Iberian bird species using a YOLO11 model. The system features a modern, nature-themed UI, user authentication, and a history of past analyses.
+**Birds App** is a lightweight, stateless web application designed to detect and classify Iberian bird species using a YOLO11 model. 
+The system focuses purely on the inference capability: a user uploads an image, the system analyzes it, and returns the result immediately.
+
+It is deployed as a **Serverless Containerized Monolith** on **Hugging Face Spaces**.
 
 ## Tech Stack
 - **Frontend**: 
@@ -11,75 +14,58 @@
   - Axios (API Communication)
   - React Router DOM (Routing)
 - **Backend**: 
-  - Python 3.x (FastAPI)
+  - Python 3.11 (FastAPI)
   - Ultralytics YOLO (Inference)
   - Pillow (Image Processing)
-  - SQLite (Persistence for users, history, and shared links)
-  - SQLAlchemy (ORM)
-  - Passlib & JWT (Authentication)
   - Uvicorn (ASGI Server)
+- **Infrastructure**:
+  - **Docker**: Multi-stage build (Frontend build -> Backend container).
+  - **Hugging Face Spaces**: Serverless compute platform (Docker SDK).
 
 ## Data Flow
-1. **Auth**: User registers/logs in. JWT token returned and stored in client.
+1. **Access**: User visits the public URL (Landing Page -> "Start Detection").
 2. **Upload**: User uploads an image via the React frontend.
-3. **Inference**: Image is sent to the FastAPI backend (`POST /api/detect`).
+3. **Inference**: Image is sent to the FastAPI backend (`POST /api/detect`) and processed in-memory.
 4. **Processing**: 
    - Backend loads the YOLO model.
    - Performs inference.
-   - Generates visualization.
-5. **Persistence**:
-   - Result is saved to `history` table linked to `user_id`.
-   - Image stored in `static/uploads`.
-6. **Result**: Backend returns processed image and metadata.
-7. **History**: Sidebar fetches user's past queries from `GET /api/history`.
+   - Generates visualization (bounding boxes).
+5. **Result**: 
+   - Backend returns the processed image (Base64) and detection metadata (JSON).
+   - **No data is persisted**. The server forgets the image immediately after the response.
+6. **Action**: User views the result and can download the image.
 
 ## Design Philosophy
-- **Lightweight & Serverless**: The architecture prioritizes simplicity and low maintenance. Instead of complex container orchestration (k8s), we utilize serverless functions (Vercel) for the backend and static hosting for the frontend.
-- **Monolithic Source, Decoupled Deploy**: The codebase is kept together for ease of development, but deploys as decoupled services (Frontend -> CDN, Backend -> Serverless).
-
-## Database Schema (SQLite)
-- **User**
-  - `id` (UUID/Integer)
-  - `username` (String, Unique)
-  - `password_hash` (String)
-  - `created_at` (DateTime)
-- **SharedResult/History**
-  - `id` (UUID)
-  - `user_id` (ForeignKey -> User.id, nullable for anonymous shares?)
-  - `image_filename` (String)
-  - `metadata_json` (Text)
-  - `created_at` (DateTime)
+- **Stateless & Ephemeral**: The application has no "memory". It treats every request as a new, isolated event. This eliminates the need for databases, storage buckets, and user management, drastically reducing complexity and cost.
+- **KISS (Keep It Simple, Stupid)**: Focus entirely on the core value proposition: Bird Classification.
+- **Cost Efficiency**: Running on Cloud Run with "scale to zero" means the cost is effectively zero when no one is using the inference engine.
 
 ## Directory Structure
 ```
 /
 ├── backend/
 │   ├── app/
-│   │   ├── main.py
-│   │   ├── model.py
-│   │   ├── database.py
-│   │   ├── models.py      # DB Models (User, History)
-│   │   ├── auth.py        # Auth logic
-│   │   └── api.py
-│   ├── static/
-│   ├── iberbirds.db
-│   └── requirements.txt
+│   │   ├── main.py        # Entrypoint (serves API + Static Frontend)
+│   │   ├── model.py       # Inference Logic
+│   │   ├── api.py         # Endpoints (only /detect)
+│   │   └── ...            # (auth.py, database.py, storage.py to be deleted)
+│   ├── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── context/       # AuthContext
-│   │   ├── components/    # Sidebar, Navbar
-│   │   ├── pages/         # Login, Register, Home
-│   │   └── ...
+│   │   ├── pages/         # Landing, Dashboard (renamed to App/Tool)
+│   │   └── ...            # (Login, Register, History components to be deleted)
+│   ├── dist/              # Built frontend assets
+│   └── ...
 ├── models/
 │   └── best.pt
-├── api/                   # Vercel Entrypoint
-│   └── index.py
+├── Dockerfile             # Multi-stage build definition
 ├── ARCHITECTURE.md
 ├── PROGRESS.md
 └── README.md
 ```
 
-## Future Roadmap
-- **CI/CD**: GitHub Actions for automated testing and Vercel deployment.
-- **Optimization**: Model quantization (ONNX/TFLite) to improve serverless startup times.
-- **Monitoring**: Lightweight integration (e.g., Sentry or Vercel Analytics).
+## Deployment Strategy (Hugging Face Spaces)
+1. **Push**: Code is pushed to the Hugging Face Space repository.
+2. **Build**: Hugging Face automatically builds the Docker image from `Dockerfile`.
+   - **No external dependencies** (No SQL, No Buckets).
+   - **Configuration**: Metadata in `README.md` (YAML header) configures the Space.

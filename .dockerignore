@@ -18,9 +18,9 @@ ENV/
 .idea
 *.swp
 
-# Frontend (not needed for backend container)
-frontend/
-node_modules/
+# Frontend dependencies and build output (to keep context small, we build inside)
+frontend/node_modules
+frontend/dist
 
 # Test files
 *.test.py

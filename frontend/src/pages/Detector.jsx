@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
-import { Upload, Feather, Loader2, AlertCircle, Download, Share2, Menu, LogIn, Camera, Image as ImageIcon, Home as HomeIcon } from 'lucide-react';
+import { Upload, Feather, Loader2, AlertCircle, Download, Image as ImageIcon, Home as HomeIcon } from 'lucide-react';
 import clsx from 'clsx';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import Sidebar from '../components/Sidebar';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Link } from 'react-router-dom';
 
-function Dashboard() {
-  const { user } = useAuth();
+function Detector() {
   const { t } = useLanguage();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
-  const [sharing, setSharing] = useState(false);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -84,71 +79,21 @@ function Dashboard() {
     document.body.removeChild(link);
   };
 
-  const handleShare = async () => {
-    if (!result) return;
-    if (!user) {
-        alert(t('tool_login_share'));
-        return;
-    }
-
-    setSharing(true);
-    try {
-        const response = await axios.post('/api/share', {
-            image_base64: result.image_base64,
-            detections: result.detections
-        });
-        const shareId = response.data.id;
-        const shareUrl = `${window.location.origin}/share/${shareId}`;
-        await navigator.clipboard.writeText(shareUrl);
-        alert(`${t('tool_share_success')}: ${shareUrl}`);
-    } catch (e) {
-        console.error(e);
-        alert("Error al compartir.");
-    } finally {
-        setSharing(false);
-    }
-  };
-
   return (
     <div className="flex h-screen bg-nature-50 overflow-hidden font-sans">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       
       <div className="flex-1 flex flex-col overflow-y-auto scroll-smooth relative">
         {/* App Header */}
         <header className="flex items-center justify-between p-4 bg-white/50 backdrop-blur-md border-b border-nature-100 sticky top-0 z-40">
             <div className="flex items-center gap-4">
-                 <button 
-                    onClick={() => setIsSidebarOpen(true)}
-                    className="p-2 hover:bg-nature-100 rounded-lg transition-colors text-nature-700"
-                >
-                    <Menu className="w-6 h-6" />
-                </button>
                 <Link to="/" className="text-earth-dark font-bold flex items-center gap-2 hover:opacity-70 transition-opacity">
                     <HomeIcon className="w-5 h-5 mb-0.5" />
                     <span className="hidden sm:inline">{t('nav_landing')}</span>
                 </Link>
             </div>
-         
           
           <div className="flex items-center gap-4">
             <LanguageSwitcher className="text-earth-dark/60 hover:text-earth-dark hover:bg-nature-100" />
-            
-            {!user ? (
-              <Link 
-                to="/login"
-                className="flex items-center gap-2 px-4 py-2 bg-earth-dark text-white rounded-lg hover:bg-earth-dark/90 transition-colors font-medium shadow-sm"
-              >
-                <LogIn className="w-4 h-4" />
-                <span>{t('nav_signin')}</span>
-              </Link>
-            ) : (
-              <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border border-nature-100 shadow-sm">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-nature-700 font-medium text-sm">
-                      <span className="font-bold">{user.username}</span>
-                  </span>
-              </div>
-            )}
           </div>
         </header>
 
@@ -267,9 +212,6 @@ function Dashboard() {
                                             <button onClick={handleDownload} className="p-2 hover:bg-nature-100 rounded-full text-earth-dark transition-colors" title={t('tool_download')}>
                                                 <Download className="w-5 h-5" />
                                             </button>
-                                            <button onClick={handleShare} disabled={!user} className={clsx("p-2 rounded-full transition-colors", user ? "hover:bg-nature-100 text-earth-dark" : "text-gray-300 cursor-not-allowed")} title={t('tool_share')}>
-                                                <Share2 className="w-5 h-5" />
-                                            </button>
                                         </div>
                                     </div>
 
@@ -314,4 +256,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Detector;

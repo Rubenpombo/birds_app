@@ -60,43 +60,10 @@ export const translations = {
     tool_result: "Analysis Result",
     tool_process_another: "Process another image",
     tool_download: "Download",
-    tool_share: "Share",
     tool_error: "Failed to identify bird. Please try again.",
-    tool_login_share: "You must login to share and save to history.",
-    tool_share_success: "Link copied to clipboard!",
     
-    // Auth & Navigation
+    // Navigation
     nav_landing: "Landing",
-    nav_signin: "Sign In",
-    nav_logout: "Sign Out",
-    nav_login_access: "Login Access",
-    nav_welcome: "Hello",
-    login_title: "Welcome Back",
-    login_subtitle: "Enter your credentials to access your account",
-    login_btn: "Sign In",
-    login_no_account: "Don't have an account?",
-    login_register_link: "Register for free",
-    register_title: "Create Account",
-    register_subtitle: "Join the community of naturalists",
-    register_btn: "Create Account",
-    register_have_account: "Already have an account?",
-    register_login_link: "Sign in",
-    form_username: "Username",
-    form_password: "Password",
-    
-    // Sidebar
-    sidebar_recent: "Recent Sightings",
-    sidebar_subtitle: "Your collection from the field",
-    sidebar_join: "Join the community to track your avian discoveries.",
-    sidebar_empty: "No sightings recorded yet.",
-    sidebar_unidentified: "Unidentified",
-
-    // Shared Result
-    shared_badge: "Shared Discovery",
-    shared_return: "Return Home",
-    shared_back: "Back",
-    shared_try: "Try it Yourself",
-    shared_not_found: "Shared result not found.",
     
     // Footer
     footer_text: "Preserving biodiversity through technology."
@@ -158,43 +125,10 @@ export const translations = {
     tool_result: "Resultado del Análisis",
     tool_process_another: "Procesar otra imagen",
     tool_download: "Descargar",
-    tool_share: "Compartir",
     tool_error: "Fallo al identificar el ave. Inténtalo de nuevo.",
-    tool_login_share: "Debes iniciar sesión para compartir y guardar.",
-    tool_share_success: "¡Enlace copiado al portapapeles!",
     
-    // Auth & Navigation
+    // Navigation
     nav_landing: "Inicio",
-    nav_signin: "Iniciar Sesión",
-    nav_logout: "Cerrar Sesión",
-    nav_login_access: "Acceso Login",
-    nav_welcome: "Hola",
-    login_title: "Bienvenido de nuevo",
-    login_subtitle: "Introduce tus credenciales para acceder",
-    login_btn: "Entrar",
-    login_no_account: "¿No tienes cuenta?",
-    login_register_link: "Regístrate gratis",
-    register_title: "Crear Cuenta",
-    register_subtitle: "Únete a la comunidad de naturalistas",
-    register_btn: "Crear Cuenta",
-    register_have_account: "¿Ya tienes cuenta?",
-    register_login_link: "Inicia sesión",
-    form_username: "Usuario",
-    form_password: "Contraseña",
-    
-    // Sidebar
-    sidebar_recent: "Avistamientos Recientes",
-    sidebar_subtitle: "Tu colección de campo",
-    sidebar_join: "Únete a la comunidad para rastrear tus descubrimientos.",
-    sidebar_empty: "Sin avistamientos registrados.",
-    sidebar_unidentified: "No identificado",
-
-    // Shared Result
-    shared_badge: "Descubrimiento Compartido",
-    shared_return: "Volver al Inicio",
-    shared_back: "Volver",
-    shared_try: "Pruébalo tú mismo",
-    shared_not_found: "Resultado compartido no encontrado.",
     
     // Footer
     footer_text: "Preservando la biodiversidad a través de la tecnología."
