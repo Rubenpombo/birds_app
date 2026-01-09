@@ -3,8 +3,3 @@ uvicorn
 ultralytics
 pillow
 python-multipart
-sqlalchemy
-passlib[bcrypt]
-python-jose[cryptography]
-psycopg2-binary
-supabase
