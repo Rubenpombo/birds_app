@@ -43,16 +43,29 @@ const Landing = () => {
                     {t('hero_desc_end')}
                 </p>
 
-                <Link 
-                    to="/app"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-earth-sand text-earth-dark font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 overflow-hidden"
-                >
-                    <span className="relative z-10 flex items-center gap-2">
-                        {t('hero_cta')}
-                        <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                </Link>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link 
+                        to="/app"
+                        className="group relative inline-flex items-center gap-3 px-8 py-4 bg-earth-sand text-earth-dark font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 overflow-hidden w-full sm:w-auto justify-center"
+                    >
+                        <span className="relative z-10 flex items-center gap-2">
+                            {t('hero_cta')}
+                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    </Link>
+
+                    <a 
+                        href="#species-showcase"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            document.getElementById('species-showcase')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-full text-lg shadow-lg hover:bg-white/20 transition-all hover:-translate-y-1 w-full sm:w-auto justify-center"
+                    >
+                        <span>{t('hero_cta_secondary')}</span>
+                    </a>
+                </div>
                 </div>
             </div>
         </section>

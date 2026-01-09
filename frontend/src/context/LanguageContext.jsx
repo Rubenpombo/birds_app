@@ -10,7 +10,8 @@ export const translations = {
     hero_desc: "Bridging Artificial Intelligence and Biodiversity. We identify and document the",
     hero_desc_highlight: "10 key species",
     hero_desc_end: "of the Iberian Peninsula to promote conservation and scientific awareness.",
-    hero_cta: "Enter Application",
+    hero_cta: "Classify the bird you saw",
+    hero_cta_secondary: "Discover supported birds",
     
     // Species Showcase
     species_title: "Supported Species",
@@ -61,6 +62,7 @@ export const translations = {
     tool_process_another: "Process another image",
     tool_download: "Download",
     tool_error: "Failed to identify bird. Please try again.",
+    tool_looks_like: "This looks like a",
     
     // Navigation
     nav_landing: "Landing",
@@ -75,7 +77,8 @@ export const translations = {
     hero_desc: "Uniendo Inteligencia Artificial y Biodiversidad. Identificamos y documentamos las",
     hero_desc_highlight: "10 especies clave",
     hero_desc_end: "de la Península Ibérica para promover la conservación y conciencia científica.",
-    hero_cta: "Entrar a la Aplicación",
+    hero_cta: "Clasificar el ave que viste",
+    hero_cta_secondary: "Descubrir aves soportadas",
     
     // Species Showcase
     species_title: "Especies Soportadas",
@@ -126,6 +129,7 @@ export const translations = {
     tool_process_another: "Procesar otra imagen",
     tool_download: "Descargar",
     tool_error: "Fallo al identificar el ave. Inténtalo de nuevo.",
+    tool_looks_like: "Parece ser un/a",
     
     // Navigation
     nav_landing: "Inicio",
