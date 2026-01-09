@@ -92,7 +92,7 @@ const SpeciesShowcase = () => {
   const speciesData = getSpeciesData(t);
 
   return (
-    <section className="py-20 bg-earth-sand px-4 md:px-8">
+    <section id="species-showcase" className="py-20 bg-earth-sand px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-earth-dark mb-4 tracking-tight">{t('species_title')}</h2>
