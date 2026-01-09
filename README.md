@@ -1,3 +1,13 @@
+---
+title: IberBirds App
+emoji: 🦅
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # 🦅 IberBirds
 
 IberBirds is a tool to help identify birds of prey and storks commonly found in the Iberian Peninsula. I built this project to explore how computer vision can assist in nature observation without complex infrastructure.
