@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from .api import router
 import os
 
@@ -38,12 +38,11 @@ if os.path.exists(frontend_dist):
         if os.path.exists(file_path) and os.path.isfile(file_path):
              return FileResponse(file_path)
              
-        # Fallback to index.html for everything else (SPA routing)
-        # But exclude /api/ to avoid confusion if api route missing? 
-        # No, fastapi matches specific routes first. If it gets here, it matched nothing else.
+        # Unknown /api/ paths should 404 rather than fall through to the SPA shell.
         if full_path.startswith("api/"):
-            return {"error": "API endpoint not found"}, 404
-            
+            return JSONResponse(status_code=404, content={"error": "API endpoint not found"})
+
+        # Fallback to index.html for everything else (SPA routing).
         return FileResponse(os.path.join(frontend_dist, "index.html"))
 else:
     print(f"Frontend dist not found at {frontend_dist}. Running in API-only mode.")
@@ -55,10 +54,12 @@ if cors_origins_env == "*":
 else:
     cors_origins = [origin.strip() for origin in cors_origins_env.split(",")]
 
+# The app uses no cookies/auth, so credentials are disabled. This also keeps the
+# wildcard origin (`*`) valid, since browsers reject `*` together with credentials.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

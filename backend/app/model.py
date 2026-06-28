@@ -19,15 +19,23 @@ class ModelService:
             
         print(f"Loading model from: {self.model_path}")
         self.model = YOLO(self.model_path)
+        self._warmup()
+
+    def _warmup(self) -> None:
+        """Run one dummy inference so the first real request isn't penalized by lazy init."""
+        try:
+            self.model(Image.new("RGB", (640, 640)), conf=0.25, verbose=False)
+            print("Model warmup complete.")
+        except Exception as e:
+            print(f"Model warmup skipped: {e}")
 
     def predict(self, image: Image.Image) -> Any:
         """
         Run inference on a PIL Image.
         Returns the Ultralytics Results object.
         """
-        # Run inference
         # conf=0.25 is a standard default, can be adjusted
-        results = self.model(image, conf=0.25) 
+        results = self.model(image, conf=0.25, verbose=False)
         return results[0]  # Return the first result (single image)
 
 # Singleton instance
