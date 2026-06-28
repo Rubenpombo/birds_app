@@ -45,3 +45,8 @@ Thumbs.db
 
 # Other
 .gemini/
+
+# Model weights (large binaries; deployed model is uploaded to HF separately)
+*.pt
+models/*.pt
+Experimento_6/Resultados_Exp6/weights/

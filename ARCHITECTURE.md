@@ -1,71 +1,75 @@
 # Architecture & Design
 
 ## System Overview
-**Birds App** is a lightweight, stateless web application designed to detect and classify Iberian bird species using a YOLO11 model. 
-The system focuses purely on the inference capability: a user uploads an image, the system analyzes it, and returns the result immediately.
+**IberBirds** is a lightweight, stateless web application that detects and classifies Iberian bird
+species (raptors and storks) using a YOLO11 model. The system focuses purely on inference: a user
+uploads an image, the server analyzes it, and returns the annotated result immediately.
 
-It is deployed as a **Serverless Containerized Monolith** on **Hugging Face Spaces**.
+It is deployed as a **Containerized Monolith** on **Hugging Face Spaces** (Docker SDK).
 
 ## Tech Stack
-- **Frontend**: 
+- **Frontend**:
   - React 19 (Vite 7)
   - Tailwind CSS 3.4 (Styling)
   - Lucide React (Icons)
   - Axios (API Communication)
   - React Router DOM (Routing)
-- **Backend**: 
+- **Backend**:
   - Python 3.11 (FastAPI)
   - Ultralytics YOLO (Inference)
   - Pillow (Image Processing)
   - Uvicorn (ASGI Server)
 - **Infrastructure**:
-  - **Docker**: Multi-stage build (Frontend build -> Backend container).
-  - **Hugging Face Spaces**: Serverless compute platform (Docker SDK).
+  - **Docker**: Multi-stage build (frontend build -> backend runtime).
+  - **Hugging Face Spaces**: Docker SDK, served on port `7860`.
 
 ## Data Flow
 1. **Access**: User visits the public URL (Landing Page -> "Start Detection").
 2. **Upload**: User uploads an image via the React frontend.
 3. **Inference**: Image is sent to the FastAPI backend (`POST /api/detect`) and processed in-memory.
-4. **Processing**: 
-   - Backend loads the YOLO model.
-   - Performs inference.
-   - Generates visualization (bounding boxes).
-5. **Result**: 
+4. **Processing**:
+   - Backend runs the YOLO model.
+   - Generates a visualization (bounding boxes).
+5. **Result**:
    - Backend returns the processed image (Base64) and detection metadata (JSON).
-   - **No data is persisted**. The server forgets the image immediately after the response.
-6. **Action**: User views the result and can download the image.
+   - **No data is persisted**. The image is discarded after the response.
+6. **Action**: User views the result and can download the annotated image.
 
 ## Design Philosophy
-- **Stateless & Ephemeral**: The application has no "memory". It treats every request as a new, isolated event. This eliminates the need for databases, storage buckets, and user management, drastically reducing complexity and cost.
-- **KISS (Keep It Simple, Stupid)**: Focus entirely on the core value proposition: Bird Classification.
-- **Cost Efficiency**: Running on Cloud Run with "scale to zero" means the cost is effectively zero when no one is using the inference engine.
+- **Stateless & Ephemeral**: Every request is an isolated event. No databases, storage buckets, or
+  user accounts — drastically reducing complexity and cost.
+- **KISS**: Focus entirely on the core value proposition: bird classification.
 
 ## Directory Structure
 ```
 /
 ├── backend/
 │   ├── app/
-│   │   ├── main.py        # Entrypoint (serves API + Static Frontend)
-│   │   ├── model.py       # Inference Logic
-│   │   ├── api.py         # Endpoints (only /detect)
-│   │   └── ...            # (auth.py, database.py, storage.py to be deleted)
-│   ├── requirements.txt
+│   │   ├── main.py        # Entrypoint (serves API + static frontend)
+│   │   ├── model.py       # Inference logic (YOLO singleton)
+│   │   └── api.py         # Endpoints (/detect, /health)
+│   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/         # Landing, Dashboard (renamed to App/Tool)
-│   │   └── ...            # (Login, Register, History components to be deleted)
-│   ├── dist/              # Built frontend assets
-│   └── ...
+│   │   ├── pages/         # Landing, Detector
+│   │   ├── components/    # Showcase, language switcher, etc.
+│   │   └── ...
+│   └── ...                # Vite config, Tailwind, etc.
 ├── models/
-│   └── best.pt
+│   └── best.pt            # Inference weights (uploaded to the Space, not tracked in git)
+├── Experimento_6/         # Training notebook + experiment results (reference only)
 ├── Dockerfile             # Multi-stage build definition
+├── .github/workflows/     # sync_to_hub.yml: pushes the repo to the HF Space
 ├── ARCHITECTURE.md
 ├── PROGRESS.md
 └── README.md
 ```
 
 ## Deployment Strategy (Hugging Face Spaces)
-1. **Push**: Code is pushed to the Hugging Face Space repository.
-2. **Build**: Hugging Face automatically builds the Docker image from `Dockerfile`.
-   - **No external dependencies** (No SQL, No Buckets).
-   - **Configuration**: Metadata in `README.md` (YAML header) configures the Space.
+1. **Sync**: A push to `main` triggers `.github/workflows/sync_to_hub.yml`, which uploads the repo
+   to the Hugging Face Space.
+2. **Build**: Hugging Face builds the Docker image from `Dockerfile`.
+   - **No external dependencies** (no SQL, no buckets).
+   - **Configuration**: Metadata in `README.md` (YAML header) configures the Space (`app_port: 7860`).
+3. **Model weights**: `models/best.pt` is uploaded directly to the Space repository (it is not
+   committed to git, since it is a large binary).

@@ -219,7 +219,7 @@ function Detector() {
                                     <div className="mb-4 text-center">
                                         {result.detections.length > 0 ? (
                                             <h2 className="text-2xl md:text-3xl text-earth-dark font-light">
-                                                {t('tool_looks_like')} <span className="font-bold text-earth-teal">{result.detections.sort((a, b) => b.confidence - a.confidence)[0].class_name.replace(/_/g, ' ')}</span>
+                                                {t('tool_looks_like')} <span className="font-bold text-earth-teal">{[...result.detections].sort((a, b) => b.confidence - a.confidence)[0].class_name.replace(/_/g, ' ')}</span>
                                             </h2>
                                         ) : (
                                             <h2 className="text-xl text-gray-500 italic">{t('tool_error')}</h2>

@@ -45,8 +45,17 @@ If you want to run this on your own machine (requires Docker):
 git clone https://github.com/Rubenpombo/birds_app.git
 cd birds_app
 
+# Provide the model weights (not tracked in git).
+# Use your own trained weights, or the experiment weights included in this repo:
+mkdir -p models
+cp Experimento_6/Resultados_Exp6/weights/best.pt models/best.pt
+
 # Build and run
 docker build -t iberbirds .
 docker run -p 7860:7860 iberbirds
 ```
 The app will be available at `http://localhost:7860`.
+
+> **Note:** `models/best.pt` is intentionally excluded from git (large binary). On Hugging Face
+> Spaces the weights are uploaded directly to the Space repository. For a local build you must
+> place a `best.pt` in `models/` as shown above.

@@ -27,15 +27,14 @@
     - [x] Remove `AuthContext` and `Sidebar` history logic.
     - [x] Make the "Dashboard" accessible without login (rename to "Detector").
 
-## Phase 5: Cloud Run Deployment (Stateless)
-- [x] **Container Architecture**: Implement Docker multi-stage build (Node + Python).
-- [x] **Monolithic Serving**: FastAPI serving both API and React production build.
-- [x] **Architecture Pivot**: Transitioned to **Google Cloud Run** Stateless.
-- [ ] **Google Cloud Deployment**:
-    - [ ] Create Artifact Registry and push Docker image.
-    - [ ] Deploy to **Cloud Run** (Max instances: 3, Memory: 2Gi).
-    - [ ] Verify public access.
+## Phase 5: Deployment (Hugging Face Spaces, Stateless)
+- [x] **Container Architecture**: Docker multi-stage build (Node + Python).
+- [x] **Monolithic Serving**: FastAPI serving both the API and the React production build.
+- [x] **Hugging Face Spaces**: Deployed as a Docker Space on port 7860.
+- [x] **CI/CD**: `sync_to_hub.yml` pushes the repo to the Space on every push to `main`.
+- [x] **Model delivery**: `models/best.pt` uploaded to the Space (kept out of git).
 
 ## Phase 6: Maintenance & Polish
-- [ ] **CI/CD**: Automate builds via GitHub Actions.
-- [ ] **Performance**: Monitor YOLO inference times on Cloud Run.
+- [x] **Repo cleanup**: Removed unused Vercel/Railway configs and stale auth dependencies.
+- [ ] **Performance**: Make inference non-blocking, warm up the model at startup, cap upload size.
+- [ ] **(Optional) Inference speed**: Evaluate ONNX/OpenVINO export for faster CPU inference.
