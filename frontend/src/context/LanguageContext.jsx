@@ -50,6 +50,7 @@ export const translations = {
     hiw_step3_desc: "Save your findings to your personal history and contribute to the local sighting database for conservation efforts.",
 
     // Dashboard & Tool
+    tool_hint: "Works best with long-distance photos of birds in flight.",
     tool_title: "Identification Tool",
     tool_subtitle: "Upload your sighting to classify the species",
     tool_drag: "Drag & Drop Image",
@@ -117,6 +118,7 @@ export const translations = {
     hiw_step3_desc: "Guarda tus hallazgos en tu historial personal y contribuye a la base de datos local para esfuerzos de conservación.",
 
     // Dashboard & Tool
+    tool_hint: "Funciona mejor con fotos a larga distancia de aves en vuelo.",
     tool_title: "Herramienta de Identificación",
     tool_subtitle: "Sube tu avistamiento para clasificar la especie",
     tool_drag: "Arrastra y Suelta",

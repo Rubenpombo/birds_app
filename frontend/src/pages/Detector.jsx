@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Feather, Loader2, AlertCircle, Download, Image as ImageIcon, Home as HomeIcon } from 'lucide-react';
+import { Upload, Feather, Loader2, AlertCircle, Download, Image as ImageIcon, Home as HomeIcon, Info } from 'lucide-react';
 import clsx from 'clsx';
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
@@ -100,6 +100,10 @@ function Detector() {
         <main className="flex-1 p-4 md:p-8 flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
             <div className="w-full max-w-6xl">
                  <div className="text-center mb-8 animate-in slide-in-from-top-4">
+                    <p className="inline-flex items-center gap-2 text-sm text-nature-700 bg-nature-100/80 px-4 py-2 rounded-full mb-4">
+                        <Info className="w-4 h-4 text-earth-teal flex-shrink-0" />
+                        {t('tool_hint')}
+                    </p>
                     <h1 className="text-3xl font-black text-earth-dark mb-2">{t('tool_title')}</h1>
                     <p className="text-nature-600">{t('tool_subtitle')}</p>
                 </div>
